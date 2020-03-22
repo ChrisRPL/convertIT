@@ -1,5 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 var segmented_bar_1 = require("tns-core-modules/ui/segmented-bar");
 var core_1 = require("@angular/core");
 var Clipboard = require("nativescript-clipboard");
@@ -8,13 +10,13 @@ var animations_1 = require("@angular/animations");
 var HomeComponent = /** @class */ (function () {
     function HomeComponent() {
         var _this = this;
-        this.listPickerCountries = ["2", "8", "10", "16"];
+        this.listPickerSystems = ["2", "8", "10", "16"];
         this.selectedListPickerIndex = 0;
-        this.nacisniety = 0;
+        this.pickedCount = 0;
         this.textFieldValue = "";
-        this.ksich = "";
+        this.calculationsToShow = "";
         this.textFieldValue1 = "";
-        this.konwerter = function (n, base) {
+        this.systemsConverter = function (n, base) {
             if ((n < 0) && (base != '10')) {
                 n = 0xFFFFFFFF + n + 1;
             }
@@ -35,8 +37,8 @@ var HomeComponent = /** @class */ (function () {
                     return ("Wrong input.........");
             }
         };
-        this.asciiConvert = function (znak) {
-            switch (znak) {
+        this.asciiConvert = function (strNumber) {
+            switch (strNumber) {
                 case "65" || "101" || "41" || "1000001":
                     return 'A';
                     break;
@@ -115,7 +117,7 @@ var HomeComponent = /** @class */ (function () {
                 case "90" || "132" || "5A" || "1011010":
                     return 'Z';
                     break;
-                //male litery
+                    //male litery
                 case "97" || "141" || "61" || "1100001":
                     return 'a';
                     break;
@@ -202,217 +204,197 @@ var HomeComponent = /** @class */ (function () {
                     break;
             }
         };
-        this.pierwotny = "";
+        this.convertedValue = "";
         this.ascii = "";
         this.options = {
             title: "Data Error",
             message: "Wrong type of input data",
             okButtonText: "OK"
         };
-        this.ascii_z = [];
-        this.zamiana = function () {
-            if ((_this.selectedBarIndex == 0) && (_this.selectedBarIndex1 == 0) || (_this.selectedBarIndex == 1) && (_this.selectedBarIndex1 == 1) ||
-                (_this.selectedBarIndex == 2) && (_this.selectedBarIndex1 == 2) ||
-                (_this.selectedBarIndex == 3) && (_this.selectedBarIndex1 == 3) ||
-                (_this.selectedBarIndex == 4) && (_this.selectedBarIndex1 == 4)) {
-                _this.pierwotny = _this.textFieldValue;
-                return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 0) && (_this.selectedBarIndex1 == 1)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 2), '8');
-                if (_this.pierwotny.includes("NaN") && _this.textFieldValue != "")
+        this.asciiToConvert = [];
+        this.convertValue = function () {
+            if ((_this.selectedConvertToIndex == 0) && (_this.selectedConvertFromIndex == 0) || (_this.selectedConvertToIndex == 1) && (_this.selectedConvertFromIndex == 1) ||
+                (_this.selectedConvertToIndex == 2) && (_this.selectedConvertFromIndex == 2) ||
+                (_this.selectedConvertToIndex == 3) && (_this.selectedConvertFromIndex == 3) ||
+                (_this.selectedConvertToIndex == 4) && (_this.selectedConvertFromIndex == 4)) {
+                _this.convertedValue = _this.textFieldValue;
+                return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 0) && (_this.selectedConvertFromIndex == 1)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 2), '8');
+                if (_this.convertedValue.includes("NaN") && _this.textFieldValue != "")
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 0) && (_this.selectedBarIndex1 == 2)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 2), '10');
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 0) && (_this.selectedConvertFromIndex == 2)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 2), '10');
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 0) && (_this.selectedBarIndex1 == 3)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 2), '16').toLocaleUpperCase();
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 0) && (_this.selectedConvertFromIndex == 3)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 2), '16').toLocaleUpperCase();
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 1) && (_this.selectedBarIndex1 == 0)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 8), '2');
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 1) && (_this.selectedConvertFromIndex == 0)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 8), '2');
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 1) && (_this.selectedBarIndex1 == 2)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 8), '10');
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 1) && (_this.selectedConvertFromIndex == 2)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 8), '10');
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 1) && (_this.selectedBarIndex1 == 3)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 8), '16').toLocaleUpperCase();
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 1) && (_this.selectedConvertFromIndex == 3)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 8), '16').toLocaleUpperCase();
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 2) && (_this.selectedBarIndex1 == 0)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 10), '2');
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 2) && (_this.selectedConvertFromIndex == 0)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 10), '2');
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 2) && (_this.selectedBarIndex1 == 1)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 10), '8');
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 2) && (_this.selectedConvertFromIndex == 1)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 10), '8');
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 2) && (_this.selectedBarIndex1 == 3)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 10), '16').toLocaleUpperCase();
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 2) && (_this.selectedConvertFromIndex == 3)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 10), '16').toLocaleUpperCase();
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 3) && (_this.selectedBarIndex1 == 0)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 16), '2');
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 3) && (_this.selectedConvertFromIndex == 0)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 16), '2');
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 3) && (_this.selectedBarIndex1 == 1)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 16), '8');
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 3) && (_this.selectedConvertFromIndex == 1)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 16), '8');
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 3) && (_this.selectedBarIndex1 == 2)) {
-                _this.pierwotny = _this.konwerter(parseInt(_this.textFieldValue, 16), '10');
-                if (_this.pierwotny.includes("NaN"))
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 3) && (_this.selectedConvertFromIndex == 2)) {
+                _this.convertedValue = _this.systemsConverter(parseInt(_this.textFieldValue, 16), '10');
+                if (_this.convertedValue.includes("NaN"))
                     alert(_this.options);
                 else
-                    return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 4) && (_this.selectedBarIndex1 == 0)) {
+                    return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 4) && (_this.selectedConvertFromIndex == 0)) {
                 _this.ascii = "";
                 for (var i = 0; i < _this.textFieldValue.length; i++) {
                     _this.ascii += _this.textFieldValue.charCodeAt(i).toString(2) + " ";
                 }
-                _this.pierwotny = _this.ascii;
-                return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 4) && (_this.selectedBarIndex1 == 1)) {
+                _this.convertedValue = _this.ascii;
+                return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 4) && (_this.selectedConvertFromIndex == 1)) {
                 _this.ascii = "";
                 for (var i = 0; i < _this.textFieldValue.length; i++) {
                     _this.ascii += _this.textFieldValue.charCodeAt(i).toString(8) + " ";
                 }
-                _this.pierwotny = _this.ascii;
-                return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 4) && (_this.selectedBarIndex1 == 2)) {
+                _this.convertedValue = _this.ascii;
+                return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 4) && (_this.selectedConvertFromIndex == 2)) {
                 _this.ascii = "";
                 for (var i = 0; i < _this.textFieldValue.length; i++) {
                     _this.ascii += _this.textFieldValue.charCodeAt(i).toString(10) + " ";
                 }
-                _this.pierwotny = _this.ascii;
-                return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 4) && (_this.selectedBarIndex1 == 3)) {
+                _this.convertedValue = _this.ascii;
+                return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 4) && (_this.selectedConvertFromIndex == 3)) {
                 _this.ascii = "";
                 for (var i = 0; i < _this.textFieldValue.length; i++) {
                     _this.ascii += _this.textFieldValue.charCodeAt(i).toString(16).toLocaleUpperCase() + " ";
                 }
-                _this.pierwotny = _this.ascii;
-                return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 0) && (_this.selectedBarIndex1 == 4)) {
-                _this.ascii_z = [];
+                _this.convertedValue = _this.ascii;
+                return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 0) && (_this.selectedConvertFromIndex == 4)) {
+                _this.asciiToConvert = [];
                 _this.ascii = "";
-                _this.ascii_z = _this.textFieldValue.split(' ');
-                for (var i = 0; i < _this.ascii_z.length; i++) {
-                    _this.ascii_z[i] = _this.asciiConvert(parseInt(_this.ascii_z[i], 2).toString());
-                    _this.ascii += _this.ascii_z[i];
+                _this.asciiToConvert = _this.textFieldValue.split(' ');
+                for (var i = 0; i < _this.asciiToConvert.length; i++) {
+                    _this.asciiToConvert[i] = _this.asciiConvert(parseInt(_this.asciiToConvert[i], 2).toString());
+                    _this.ascii += _this.asciiToConvert[i];
                 }
-                _this.pierwotny = _this.ascii;
-                return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 1) && (_this.selectedBarIndex1 == 4)) {
-                _this.ascii_z = [];
+                _this.convertedValue = _this.ascii;
+                return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 1) && (_this.selectedConvertFromIndex == 4)) {
+                _this.asciiToConvert = [];
                 _this.ascii = "";
-                _this.ascii_z = _this.textFieldValue.split(' ');
-                for (var i = 0; i < _this.ascii_z.length; i++) {
-                    _this.ascii_z[i] = _this.asciiConvert(parseInt(_this.ascii_z[i], 8).toString());
-                    _this.ascii += _this.ascii_z[i];
+                _this.asciiToConvert = _this.textFieldValue.split(' ');
+                for (var i = 0; i < _this.asciiToConvert.length; i++) {
+                    _this.asciiToConvert[i] = _this.asciiConvert(parseInt(_this.asciiToConvert[i], 8).toString());
+                    _this.ascii += _this.asciiToConvert[i];
                 }
-                _this.pierwotny = _this.ascii;
-                return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 2) && (_this.selectedBarIndex1 == 4)) {
-                _this.ascii_z = [];
+                _this.convertedValue = _this.ascii;
+                return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 2) && (_this.selectedConvertFromIndex == 4)) {
+                _this.asciiToConvert = [];
                 _this.ascii = "";
-                _this.ascii_z = _this.textFieldValue.split(' ');
-                for (var i = 0; i < _this.ascii_z.length; i++) {
-                    _this.ascii_z[i] = _this.asciiConvert(parseInt(_this.ascii_z[i], 10).toString());
-                    _this.ascii += _this.ascii_z[i];
+                _this.asciiToConvert = _this.textFieldValue.split(' ');
+                for (var i = 0; i < _this.asciiToConvert.length; i++) {
+                    _this.asciiToConvert[i] = _this.asciiConvert(parseInt(_this.asciiToConvert[i], 10).toString());
+                    _this.ascii += _this.asciiToConvert[i];
                 }
-                _this.pierwotny = _this.ascii;
-                return _this.pierwotny;
-            }
-            else if ((_this.selectedBarIndex == 3) && (_this.selectedBarIndex1 == 4)) {
-                _this.ascii_z = [];
+                _this.convertedValue = _this.ascii;
+                return _this.convertedValue;
+            } else if ((_this.selectedConvertToIndex == 3) && (_this.selectedConvertFromIndex == 4)) {
+                _this.asciiToConvert = [];
                 _this.ascii = "";
-                _this.ascii_z = _this.textFieldValue.split(' ');
-                for (var i = 0; i < _this.ascii_z.length; i++) {
-                    _this.ascii_z[i] = _this.asciiConvert(parseInt(_this.ascii_z[i], 16).toString());
-                    _this.ascii += _this.ascii_z[i];
+                _this.asciiToConvert = _this.textFieldValue.split(' ');
+                for (var i = 0; i < _this.asciiToConvert.length; i++) {
+                    _this.asciiToConvert[i] = _this.asciiConvert(parseInt(_this.asciiToConvert[i], 16).toString());
+                    _this.ascii += _this.asciiToConvert[i];
                 }
-                _this.pierwotny = _this.ascii;
-                return _this.pierwotny;
+                _this.convertedValue = _this.ascii;
+                return _this.convertedValue;
             }
         };
-        this.getSegmentedBarItems = function () {
-            var segmentedBarItem1 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem1.title = "BIN";
-            var segmentedBarItem2 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem2.title = "OCT";
-            var segmentedBarItem3 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem3.title = "DEC";
-            var segmentedBarItem4 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem4.title = "HEX";
-            var segmentedBarItem5 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem5.title = "ASCII Text";
-            return [segmentedBarItem1, segmentedBarItem2, segmentedBarItem3, segmentedBarItem4, segmentedBarItem5];
+        this.convertToBar = function () {
+            var convertFromBinaryItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromBinaryItem.title = "BIN";
+            var convertFromOctalItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromOctalItem.title = "OCT";
+            var convertFromDecimalItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromDecimalItem.title = "DEC";
+            var convertFromHexItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromHexItem.title = "HEX";
+            var convertFromAsciiItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromAsciiItem.title = "ASCII Text";
+            return [convertFromBinaryItem, convertFromOctalItem, convertFromDecimalItem, convertFromHexItem, convertFromAsciiItem];
         };
-        this.segmentedBarItems = this.getSegmentedBarItems();
-        this.selectedBarIndex = 0;
-        this.getSegmentedBarItems1 = function () {
-            var segmentedBarItem1 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem1.title = "BIN";
-            var segmentedBarItem2 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem2.title = "OCT";
-            var segmentedBarItem3 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem3.title = "DEC";
-            var segmentedBarItem4 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem4.title = "HEX";
-            var segmentedBarItem5 = new segmented_bar_1.SegmentedBarItem();
-            segmentedBarItem5.title = "ASCII Text";
-            return [segmentedBarItem1, segmentedBarItem2, segmentedBarItem3, segmentedBarItem4, segmentedBarItem5];
+        this.convertToBarItems = this.convertToBar();
+        this.selectedConvertToIndex = 0;
+        this.convertFromBar = function () {
+            var convertFromBinaryItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromBinaryItem.title = "BIN";
+            var convertFromOctalItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromOctalItem.title = "OCT";
+            var convertFromDecimalItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromDecimalItem.title = "DEC";
+            var convertFromHexItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromHexItem.title = "HEX";
+            var convertFromAsciiItem = new segmented_bar_1.SegmentedBarItem();
+            convertFromAsciiItem.title = "ASCII Text";
+            return [convertFromBinaryItem, convertFromOctalItem, convertFromDecimalItem, convertFromHexItem, convertFromAsciiItem];
         };
-        this.segmentedBarItems1 = this.getSegmentedBarItems1();
-        this.selectedBarIndex1 = 0;
-        this.wynik = "";
+        this.convertFromBarItems = this.convertFromBar();
+        this.selectedConvertFromIndex = 0;
+        this.hiddenScoreToCalculate = "";
         this.tab = [];
-        this.wynik_int = 0;
-        this.pomoc = "";
+        this.hiddenScoreToCalculate_int = 0;
+        this.calculationsHelpStr = "";
         this.kontrola = 0;
         exports.doneTap = this.doneTap;
         this.stored = "";
@@ -423,313 +405,283 @@ var HomeComponent = /** @class */ (function () {
     };
     HomeComponent.prototype.plus = function () {
         if (this.tab[this.tab.length - 1] == "+" || this.tab[this.tab.length - 1] == "-" || this.tab[this.tab.length - 1] == "*" || this.tab[this.tab.length - 1] == "/" || this.tab[this.tab.length - 1] == ".") {
-            this.wynik = this.wynik;
-        }
-        else {
-            this.nacisniety = 0;
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate;
+        } else {
+            this.pickedCount = 0;
             if (this.selectedListPickerIndex == 2) {
-                this.tab.push(this.wynik);
+                this.tab.push(this.hiddenScoreToCalculate);
                 this.tab.push("+");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 0) {
-                this.tab.push(parseInt(this.wynik, 2).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 0) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 2).toString());
                 this.tab.push("+");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 1) {
-                this.tab.push(parseInt(this.wynik, 8).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 1) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 8).toString());
                 this.tab.push("+");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 3) {
-                this.tab.push(parseInt(this.wynik, 16).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 3) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 16).toString());
                 this.tab.push("+");
-                this.wynik = "";
+                this.hiddenScoreToCalculate = "";
             }
-            this.ksich += "+";
+            this.calculationsToShow += "+";
         }
     };
     HomeComponent.prototype.minus = function () {
         if (this.tab[this.tab.length - 1] == "+" || this.tab[this.tab.length - 1] == "-" || this.tab[this.tab.length - 1] == "*" || this.tab[this.tab.length - 1] == "/") {
-            this.wynik = this.wynik;
-        }
-        else {
-            this.nacisniety = 0;
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate;
+        } else {
+            this.pickedCount = 0;
             if (this.selectedListPickerIndex == 2) {
-                this.tab.push(this.wynik);
+                this.tab.push(this.hiddenScoreToCalculate);
                 this.tab.push("-");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 0) {
-                this.tab.push(parseInt(this.wynik, 2).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 0) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 2).toString());
                 this.tab.push("-");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 1) {
-                this.tab.push(parseInt(this.wynik, 8).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 1) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 8).toString());
                 this.tab.push("-");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 3) {
-                this.tab.push(parseInt(this.wynik, 16).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 3) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 16).toString());
                 this.tab.push("-");
-                this.wynik = "";
+                this.hiddenScoreToCalculate = "";
             }
-            this.ksich += "-";
+            this.calculationsToShow += "-";
         }
     };
     HomeComponent.prototype.dzielenie = function () {
         if (this.tab[this.tab.length - 1] == "+" || this.tab[this.tab.length - 1] == "-" || this.tab[this.tab.length - 1] == "*" || this.tab[this.tab.length - 1] == "/") {
-            this.wynik = this.wynik;
-        }
-        else {
-            this.nacisniety = 0;
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate;
+        } else {
+            this.pickedCount = 0;
             if (this.selectedListPickerIndex == 2) {
-                this.tab.push(this.wynik);
+                this.tab.push(this.hiddenScoreToCalculate);
                 this.tab.push("/");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 0) {
-                this.tab.push(parseInt(this.wynik, 2).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 0) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 2).toString());
                 this.tab.push("/");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 1) {
-                this.tab.push(parseInt(this.wynik, 8).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 1) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 8).toString());
                 this.tab.push("/");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 3) {
-                this.tab.push(parseInt(this.wynik, 16).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 3) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 16).toString());
                 this.tab.push("/");
-                this.wynik = "";
+                this.hiddenScoreToCalculate = "";
             }
-            this.ksich += "/";
+            this.calculationsToShow += "/";
         }
     };
     HomeComponent.prototype.mnozenie = function () {
         if (this.tab[this.tab.length - 1] == "+" || this.tab[this.tab.length - 1] == "-" || this.tab[this.tab.length - 1] == "*" || this.tab[this.tab.length - 1] == "/") {
-            this.wynik = this.wynik;
-        }
-        else {
-            this.nacisniety = 0;
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate;
+        } else {
+            this.pickedCount = 0;
             if (this.selectedListPickerIndex == 2) {
-                this.tab.push(this.wynik);
+                this.tab.push(this.hiddenScoreToCalculate);
                 this.tab.push("*");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 0) {
-                this.tab.push(parseInt(this.wynik, 2).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 0) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 2).toString());
                 this.tab.push("*");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 1) {
-                this.tab.push(parseInt(this.wynik, 8).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 1) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 8).toString());
                 this.tab.push("*");
-                this.wynik = "";
-            }
-            else if (this.selectedListPickerIndex == 3) {
-                this.tab.push(parseInt(this.wynik, 16).toString());
+                this.hiddenScoreToCalculate = "";
+            } else if (this.selectedListPickerIndex == 3) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 16).toString());
                 this.tab.push("*");
-                this.wynik = "";
+                this.hiddenScoreToCalculate = "";
             }
-            this.ksich += "*";
+            this.calculationsToShow += "*";
         }
     };
     HomeComponent.prototype.rowna = function () {
         if (this.tab[this.tab.length - 1] == "+" || this.tab[this.tab.length - 1] == "-" || this.tab[this.tab.length - 1] == "*" || this.tab[this.tab.length - 1] == "/") {
-            this.wynik = this.wynik;
-        }
-        else {
-            this.nacisniety = 0;
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate;
+        } else {
+            this.pickedCount = 0;
             if (this.selectedListPickerIndex == 2) {
-                this.tab.push(this.wynik);
+                this.tab.push(this.hiddenScoreToCalculate);
                 for (var i = 0; i < this.tab.length; i++) {
-                    this.pomoc += this.tab[i];
+                    this.calculationsHelpStr += this.tab[i];
                 }
-                this.wynik_int = eval(this.pomoc);
-                this.wynik = this.wynik_int.toString();
-                this.wynik_int = 0;
-                this.pomoc = "";
+                this.hiddenScoreToCalculate_int = eval(this.calculationsHelpStr);
+                this.hiddenScoreToCalculate = this.hiddenScoreToCalculate_int.toString();
+                this.hiddenScoreToCalculate_int = 0;
+                this.calculationsHelpStr = "";
+                this.tab = [];
+            } else if (this.selectedListPickerIndex == 0) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 2).toString());
+                for (var i = 0; i < this.tab.length; i++) {
+                    this.calculationsHelpStr += this.tab[i];
+                }
+                this.hiddenScoreToCalculate_int = eval(this.calculationsHelpStr).toFixed(2);
+                this.hiddenScoreToCalculate = this.systemsConverter(this.hiddenScoreToCalculate_int, "2");
+                this.hiddenScoreToCalculate_int = 0;
+                this.calculationsHelpStr = "";
+                this.tab = [];
+            } else if (this.selectedListPickerIndex == 1) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 8).toString());
+                for (var i = 0; i < this.tab.length; i++) {
+                    this.calculationsHelpStr += this.tab[i];
+                }
+                this.hiddenScoreToCalculate_int = eval(this.calculationsHelpStr).toFixed(2);
+                this.hiddenScoreToCalculate = this.systemsConverter(this.hiddenScoreToCalculate_int, "8");
+                this.hiddenScoreToCalculate_int = 0;
+                this.calculationsHelpStr = "";
+                this.tab = [];
+            } else if (this.selectedListPickerIndex == 3) {
+                this.tab.push(parseInt(this.hiddenScoreToCalculate, 16).toString());
+                for (var i = 0; i < this.tab.length; i++) {
+                    this.calculationsHelpStr += this.tab[i];
+                }
+                this.hiddenScoreToCalculate_int = eval(this.calculationsHelpStr).toFixed(2);
+                this.hiddenScoreToCalculate = this.systemsConverter(this.hiddenScoreToCalculate_int, "16");
+                this.hiddenScoreToCalculate_int = 0;
+                this.calculationsHelpStr = "";
                 this.tab = [];
             }
-            else if (this.selectedListPickerIndex == 0) {
-                this.tab.push(parseInt(this.wynik, 2).toString());
-                for (var i = 0; i < this.tab.length; i++) {
-                    this.pomoc += this.tab[i];
-                }
-                this.wynik_int = eval(this.pomoc).toFixed(2);
-                this.wynik = this.konwerter(this.wynik_int, "2");
-                this.wynik_int = 0;
-                this.pomoc = "";
-                this.tab = [];
-            }
-            else if (this.selectedListPickerIndex == 1) {
-                this.tab.push(parseInt(this.wynik, 8).toString());
-                for (var i = 0; i < this.tab.length; i++) {
-                    this.pomoc += this.tab[i];
-                }
-                this.wynik_int = eval(this.pomoc).toFixed(2);
-                this.wynik = this.konwerter(this.wynik_int, "8");
-                this.wynik_int = 0;
-                this.pomoc = "";
-                this.tab = [];
-            }
-            else if (this.selectedListPickerIndex == 3) {
-                this.tab.push(parseInt(this.wynik, 16).toString());
-                for (var i = 0; i < this.tab.length; i++) {
-                    this.pomoc += this.tab[i];
-                }
-                this.wynik_int = eval(this.pomoc).toFixed(2);
-                this.wynik = this.konwerter(this.wynik_int, "16");
-                this.wynik_int = 0;
-                this.pomoc = "";
-                this.tab = [];
-            }
-            if (this.wynik.includes("NaN"))
-                this.wynik = "WRONG TYPE OF INPUT DATA";
-            this.ksich = this.wynik;
+            if (this.hiddenScoreToCalculate.includes("NaN"))
+                this.hiddenScoreToCalculate = "WRONG TYPE OF INPUT DATA";
+            this.calculationsToShow = this.hiddenScoreToCalculate;
         }
     };
-    HomeComponent.prototype.hex1 = function () {
-        this.wynik = this.wynik + "A";
-        this.ksich = this.ksich + "A";
+    HomeComponent.prototype.addHexValueA = function () {
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "A";
+        this.calculationsToShow = this.calculationsToShow + "A";
     };
-    HomeComponent.prototype.hex2 = function () {
-        this.wynik = this.wynik + "B";
-        this.ksich = this.ksich + "B";
+    HomeComponent.prototype.addHexValueB = function () {
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "B";
+        this.calculationsToShow = this.calculationsToShow + "B";
     };
-    HomeComponent.prototype.hex3 = function () {
-        this.wynik = this.wynik + "C";
-        this.ksich = this.ksich + "C";
+    HomeComponent.prototype.addHexValueC = function () {
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "C";
+        this.calculationsToShow = this.calculationsToShow + "C";
     };
-    HomeComponent.prototype.hex4 = function () {
-        this.wynik = this.wynik + "D";
-        this.ksich = this.ksich + "D";
+    HomeComponent.prototype.addHexValueD = function () {
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "D";
+        this.calculationsToShow = this.calculationsToShow + "D";
     };
-    HomeComponent.prototype.hex5 = function () {
-        this.wynik = this.wynik + "E";
-        this.ksich = this.ksich + "E";
+    HomeComponent.prototype.addHexValueE = function () {
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "E";
+        this.calculationsToShow = this.calculationsToShow + "E";
     };
-    HomeComponent.prototype.hex6 = function () {
-        this.wynik = this.wynik + "F";
-        this.ksich = this.ksich + "F";
+    HomeComponent.prototype.addHexValueF = function () {
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "F";
+        this.calculationsToShow = this.calculationsToShow + "F";
     };
     HomeComponent.prototype.number1 = function () {
-        this.wynik = this.wynik + "0";
-        this.ksich = this.ksich + "0";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "0";
+        this.calculationsToShow = this.calculationsToShow + "0";
     };
     HomeComponent.prototype.number2 = function () {
-        this.wynik = this.wynik + "1";
-        this.ksich = this.ksich + "1";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "1";
+        this.calculationsToShow = this.calculationsToShow + "1";
     };
     HomeComponent.prototype.number3 = function () {
-        this.wynik = this.wynik + "2";
-        this.ksich = this.ksich + "2";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "2";
+        this.calculationsToShow = this.calculationsToShow + "2";
     };
     HomeComponent.prototype.number4 = function () {
-        this.wynik = this.wynik + "3";
-        this.ksich = this.ksich + "3";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "3";
+        this.calculationsToShow = this.calculationsToShow + "3";
     };
     HomeComponent.prototype.number5 = function () {
-        this.wynik = this.wynik + "4";
-        this.ksich = this.ksich + "4";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "4";
+        this.calculationsToShow = this.calculationsToShow + "4";
     };
     HomeComponent.prototype.number6 = function () {
-        this.wynik = this.wynik + "5";
-        this.ksich = this.ksich + "5";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "5";
+        this.calculationsToShow = this.calculationsToShow + "5";
     };
     HomeComponent.prototype.number7 = function () {
-        this.wynik = this.wynik + "6";
-        this.ksich = this.ksich + "6";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "6";
+        this.calculationsToShow = this.calculationsToShow + "6";
     };
     HomeComponent.prototype.number8 = function () {
-        this.wynik = this.wynik + "7";
-        this.ksich = this.ksich + "7";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "7";
+        this.calculationsToShow = this.calculationsToShow + "7";
     };
     HomeComponent.prototype.number9 = function () {
-        this.wynik = this.wynik + "8";
-        this.ksich = this.ksich + "8";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "8";
+        this.calculationsToShow = this.calculationsToShow + "8";
     };
     HomeComponent.prototype.number10 = function () {
-        this.wynik = this.wynik + "9";
-        this.ksich = this.ksich + "9";
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate + "9";
+        this.calculationsToShow = this.calculationsToShow + "9";
     };
     HomeComponent.prototype.clear = function () {
-        this.nacisniety = 0;
-        this.wynik = "";
-        this.wynik_int = 0;
-        this.ksich = "";
+        this.pickedCount = 0;
+        this.hiddenScoreToCalculate = "";
+        this.hiddenScoreToCalculate_int = 0;
+        this.calculationsToShow = "";
     };
     HomeComponent.prototype.pow = function () {
         if (this.tab[this.tab.length - 1] == "+" || this.tab[this.tab.length - 1] == "-" || this.tab[this.tab.length - 1] == "*" || this.tab[this.tab.length - 1] == "/" || this.tab[this.tab.length - 1] == ".") {
-            this.wynik = this.wynik;
-        }
-        else {
-            this.nacisniety = 0;
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate;
+        } else {
+            this.pickedCount = 0;
             if (this.selectedListPickerIndex == 0) {
-                this.wynik = this.konwerter((parseInt(this.wynik, 2) * parseInt(this.wynik, 2)), "2");
+                this.hiddenScoreToCalculate = this.systemsConverter((parseInt(this.hiddenScoreToCalculate, 2) * parseInt(this.hiddenScoreToCalculate, 2)), "2");
+            } else if (this.selectedListPickerIndex == 1) {
+                this.hiddenScoreToCalculate = this.systemsConverter((parseInt(this.hiddenScoreToCalculate, 8) * parseInt(this.hiddenScoreToCalculate, 8)), "8");
+            } else if (this.selectedListPickerIndex == 2) {
+                this.hiddenScoreToCalculate = (parseInt(this.systemsConverter((parseInt(this.hiddenScoreToCalculate, 10) * parseInt(this.hiddenScoreToCalculate, 10)), "10"), 10).toFixed(2)).toString();
+            } else if (this.selectedListPickerIndex == 3) {
+                this.hiddenScoreToCalculate = (parseInt(this.systemsConverter((parseInt(this.hiddenScoreToCalculate, 16) * parseInt(this.hiddenScoreToCalculate, 16)), "16").toLocaleUpperCase(), 16).toFixed(2)).toString();
             }
-            else if (this.selectedListPickerIndex == 1) {
-                this.wynik = this.konwerter((parseInt(this.wynik, 8) * parseInt(this.wynik, 8)), "8");
-            }
-            else if (this.selectedListPickerIndex == 2) {
-                this.wynik = (parseInt(this.konwerter((parseInt(this.wynik, 10) * parseInt(this.wynik, 10)), "10"), 10).toFixed(2)).toString();
-            }
-            else if (this.selectedListPickerIndex == 3) {
-                this.wynik = (parseInt(this.konwerter((parseInt(this.wynik, 16) * parseInt(this.wynik, 16)), "16").toLocaleUpperCase(), 16).toFixed(2)).toString();
-            }
-            this.ksich = this.wynik;
+            this.calculationsToShow = this.hiddenScoreToCalculate;
         }
     };
     HomeComponent.prototype.sqrt = function () {
         if (this.tab[this.tab.length - 1] == "+" || this.tab[this.tab.length - 1] == "-" || this.tab[this.tab.length - 1] == "*" || this.tab[this.tab.length - 1] == "/" || this.tab[this.tab.length - 1] == ".") {
-            this.wynik = this.wynik;
-        }
-        else {
-            this.nacisniety = 0;
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate;
+        } else {
+            this.pickedCount = 0;
             if (this.selectedListPickerIndex == 0) {
-                this.wynik = this.konwerter((Math.sqrt(parseInt(this.wynik, 2))), "2");
+                this.hiddenScoreToCalculate = this.systemsConverter((Math.sqrt(parseInt(this.hiddenScoreToCalculate, 2))), "2");
+            } else if (this.selectedListPickerIndex == 1) {
+                this.hiddenScoreToCalculate = this.systemsConverter((Math.sqrt(parseInt(this.hiddenScoreToCalculate, 8))), "8");
+            } else if (this.selectedListPickerIndex == 2) {
+                this.hiddenScoreToCalculate = (Math.sqrt(parseInt(this.hiddenScoreToCalculate, 10))).toString();
+            } else if (this.selectedListPickerIndex == 3) {
+                this.hiddenScoreToCalculate = this.systemsConverter((Math.sqrt(parseInt(this.hiddenScoreToCalculate, 16))), "16").toLocaleUpperCase();
             }
-            else if (this.selectedListPickerIndex == 1) {
-                this.wynik = this.konwerter((Math.sqrt(parseInt(this.wynik, 8))), "8");
-            }
-            else if (this.selectedListPickerIndex == 2) {
-                this.wynik = (Math.sqrt(parseInt(this.wynik, 10))).toString();
-            }
-            else if (this.selectedListPickerIndex == 3) {
-                this.wynik = this.konwerter((Math.sqrt(parseInt(this.wynik, 16))), "16").toLocaleUpperCase();
-            }
-            this.ksich = this.wynik;
+            this.calculationsToShow = this.hiddenScoreToCalculate;
         }
     };
     HomeComponent.prototype.sign = function () {
-        this.nacisniety = this.nacisniety + 1;
-        if (this.nacisniety % 2 != 0) {
-            this.ksich += "-";
-            this.wynik += "-";
-        }
-        else {
-            this.ksich = this.ksich.slice(0, this.ksich.length - 1);
-            this.wynik = this.wynik.slice(0, this.wynik.length - 1);
+        this.pickedCount = this.pickedCount + 1;
+        if (this.pickedCount % 2 != 0) {
+            this.calculationsToShow += "-";
+            this.hiddenScoreToCalculate += "-";
+        } else {
+            this.calculationsToShow = this.calculationsToShow.slice(0, this.calculationsToShow.length - 1);
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate.slice(0, this.hiddenScoreToCalculate.length - 1);
         }
     };
-    HomeComponent.prototype.czysc = function () {
+    HomeComponent.prototype.clearTextField = function () {
         this.textFieldValue = "";
     };
     HomeComponent.prototype.dot = function () {
         if (this.tab[this.tab.length - 1] == "+" || this.tab[this.tab.length - 1] == "-" || this.tab[this.tab.length - 1] == "*" || this.tab[this.tab.length - 1] == "/" || this.tab[this.tab.length - 1] == ".") {
-            this.wynik = this.wynik;
-        }
-        else {
-            this.ksich += ".";
-            this.wynik += ".";
+            this.hiddenScoreToCalculate = this.hiddenScoreToCalculate;
+        } else {
+            this.calculationsToShow += ".";
+            this.hiddenScoreToCalculate += ".";
         }
     };
     HomeComponent.prototype.delete = function () {
-        this.wynik = this.wynik.slice(0, this.wynik.length - 1);
-        this.ksich = this.ksich.slice(0, this.ksich.length - 1);
+        this.hiddenScoreToCalculate = this.hiddenScoreToCalculate.slice(0, this.hiddenScoreToCalculate.length - 1);
+        this.calculationsToShow = this.calculationsToShow.slice(0, this.calculationsToShow.length - 1);
         this.tab.pop();
     };
     HomeComponent.prototype.copy = function (value, message) {
@@ -744,8 +696,7 @@ var HomeComponent = /** @class */ (function () {
             _this.stored = content;
         });
     };
-    HomeComponent.prototype.ngOnInit = function () {
-    };
+    HomeComponent.prototype.ngOnInit = function () {};
     HomeComponent = __decorate([
         core_1.Component({
             selector: "Home",
@@ -754,8 +705,12 @@ var HomeComponent = /** @class */ (function () {
             styleUrls: ['./home.component.css'],
             animations: [
                 animations_1.trigger("state", [
-                    animations_1.state("inactive", animations_1.style({ "background-color": "red" })),
-                    animations_1.state("active", animations_1.style({ "background-color": "green" })),
+                    animations_1.state("inactive", animations_1.style({
+                        "background-color": "red"
+                    })),
+                    animations_1.state("active", animations_1.style({
+                        "background-color": "green"
+                    })),
                     animations_1.transition("inactive => active", [animations_1.animate("600ms ease-out")]),
                     animations_1.transition("active => inactive", [animations_1.animate("600ms ease-out")]),
                 ])

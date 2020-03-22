@@ -5,40 +5,40 @@
 <TabView selectedTabTextColor="white" tabBackgroundColor="#6a4318" height="100%">
     <StackLayout backgroundColor="#416f40" *tabItem="{title: 'Converter'}">
         <Label color="white" marginTop="50px" class="nag1" fontSize="20px" text="From: "></Label>
-        <SegmentedBar backgroundColor="#E6AF2E" [items]="segmentedBarItems" [(ngModel)]="selectedBarIndex">
+        <SegmentedBar backgroundColor="#E6AF2E" [items]="convertToBarItems" [(ngModel)]="selectedConvertToIndex">
         </SegmentedBar>
         <TextField backgroundColor="white" [(ngModel)]="textFieldValue" hint="Insert number..."></TextField>
         <Label color="white" class="nag1" marginTop="50px" fontSize="20px" text="To: "></Label>
-        <SegmentedBar backgroundColor="#E6AF2E" [items]="segmentedBarItems1" [(ngModel)]="selectedBarIndex1">
+        <SegmentedBar backgroundColor="#E6AF2E" [items]="convertFromBarItems" [(ngModel)]="selectedConvertFromIndex">
         </SegmentedBar>
         <TextView backgroundColor="transparent" editable="true" textWrap="true" scrollableHeight="true"
             returnPress="doneTap" isUserInteractionEnabled="false" height="160px" backgroundColor="white"
-            [text]=zamiana()></TextView>
+            [text]=convertValue()></TextView>
         <Button marginTop="50px" backgroundColor="#00ccff" text="COPY RESULT"
-            (tap)="copy(zamiana(), 'Copied to clipboard!')" class="btn btn-primary btn-active"></Button>
-        <Button backgroundColor="#00ccff" text="CLEAR" (tap)="czysc()" class="btn btn-primary btn-active"></Button>
+            (tap)="copy(convertValue(), 'Copied to clipboard!')" class="btn btn-primary btn-active"></Button>
+        <Button backgroundColor="#00ccff" text="CLEAR" (tap)="clearTextField()"
+            class="btn btn-primary btn-active"></Button>
 
 
     </StackLayout>
 
-    <GridLayout marginLeft="auto" marginLeft="auto" backgroundColor="#416f40" dock="bottom"
-        rows="40, 60, 60, 60, 60, 60, 60, 60, 30" columns="70, 70, 70, 70, 70" *tabItem="{title: 'Calculator'}">
+    <GridLayout verticalAlignment="center" horizontalAlignment="center" backgroundColor="#416f40"
+        rows="*, *, *, *, *, *, *, *, *,*" columns="*, *, *, *, *" *tabItem="{title: 'Calculator'}">
         <Label backgroundColor="transparent" fontSize="30px" color="white" textAlignment="center" row="1" colSpan="5"
-            width="600px" height="2px" marginBottom="20px" [text]=wynik></Label>
+            width="600px" height="2px" marginBottom="20px" [text]=hiddenScoreToCalculate></Label>
         <Label backgroundColor="white" fontSize="20" color="black" textAlignment="center" row="1" colSpan="5"
-            width="85%" marginLeft="auto" marginLeft="auto" height="250px" paddingTop="25px" marginBottom="50px"
-            [text]=ksich></Label>
-        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="0" text="+" (tap)="plus()"></Button>
-        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="1" text="-" (tap)="minus()"></Button>
-        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="2" text="*" (tap)="mnozenie()"></Button>
-        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="3" text="/" (tap)="dzielenie()"></Button>
-        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="4" text="=" (tap)="rowna()"></Button>
-        <Button fontSize="20" row="3" col="3" text="A" (tap)="hex1()"></Button>
-        <Button fontSize="20" row="3" col="4" text="B" (tap)="hex2()"></Button>
-        <Button fontSize="20" row="4" col="3" text="C" (tap)="hex3()"></Button>
-        <Button fontSize="20" row="4" col="4" text="D" (tap)="hex4()"></Button>
-        <Button fontSize="20" row="5" col="3" text="E" (tap)="hex5()"></Button>
-        <Button fontSize="20" row="5" col="4" text="F" (tap)="hex6()"></Button>
+            width="85%" height="250px" paddingTop="25px" marginBottom="50px" [text]=calculationsToShow></Label>
+        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="0" text="+" (tap)="add()"></Button>
+        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="1" text="-" (tap)="subtract()"></Button>
+        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="2" text="*" (tap)="multiply()"></Button>
+        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="3" text="/" (tap)="divide()"></Button>
+        <Button fontSize="20" backgroundColor="#ff9900" row="2" col="4" text="=" (tap)="getScore()"></Button>
+        <Button fontSize="20" row="3" col="3" text="A" (tap)="addHexValueA()"></Button>
+        <Button fontSize="20" row="3" col="4" text="B" (tap)="addHexValueB()"></Button>
+        <Button fontSize="20" row="4" col="3" text="C" (tap)="addHexValueC()"></Button>
+        <Button fontSize="20" row="4" col="4" text="D" (tap)="addHexValueD()"></Button>
+        <Button fontSize="20" row="5" col="3" text="E" (tap)="addHexValueE()"></Button>
+        <Button fontSize="20" row="5" col="4" text="F" (tap)="addHexValueF()"></Button>
         <Button fontSize="20" backgroundColor="#00ccff" row="6" col="0" text="0" (tap)="number1()"></Button>
         <Button fontSize="20" backgroundColor="#00ccff" row="6" col="1" text="+/-" (tap)="sign()"></Button>
         <Button fontSize="20" backgroundColor="#00ccff" row="6" col="2" text="." (tap)="dot()"></Button>
@@ -53,11 +53,11 @@
         <Button fontSize="20" backgroundColor="#00ccff" row="3" col="2" text="9" (tap)="number10()"></Button>
         <Button fontSize="20" backgroundColor="red" row="6" col="3" text="MRC" (tap)="clear()"></Button>
         <Button fontSize="20" backgroundColor="red" row="6" col="4" text="DEL" (tap)="delete()"></Button>
-        <Button fontSize="20" backgroundColor="red" row="7" col="0" [text]=potega (tap)="pow()"></Button>
+        <Button fontSize="20" backgroundColor="red" row="7" col="0" [text]=factory (tap)="pow()"></Button>
         <Button fontSize="20" backgroundColor="red" row="7" col="1" text="√" (tap)="sqrt()"></Button>
-        <ListPicker row="80" color="white" fontSize="20" textAlignment="center" backgroundColor="#E6AF2E" height="400"
-            margin="0" row="7" col="2" rowSpan="3" colSpan="3" [items]="listPickerCountries"
-            [(ngModel)]="selectedListPickerIndex"></ListPicker>
+        <ListPicker row="80" color="white" fontSize="20" textAlignment="center" backgroundColor="#E6AF2E" margin="0"
+            row="7" col="2" rowSpan="2" colSpan="3" [items]="listPickerSystems" [(ngModel)]="selectedListPickerIndex">
+        </ListPicker>
 
     </GridLayout>
 
